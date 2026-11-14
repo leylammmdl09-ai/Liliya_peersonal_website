@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080a18">
+  <meta name="description" content="Join Leyla's space mission: explore planets, uncover clues, and discover her portfolio.">
+  <title>Leyla Mammadli — Mission Control</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/site.css">
+  <script src="scripts/app.js" defer></script>
+  <script src="scripts/game.js" defer></script>
+</head>
+<body class="game-page">
+  <div class="starfield" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="brand" href="index.html?briefing=1" aria-label="Mission Control home">
+      <span class="brand-mark">✦</span><span>LEYLA<span class="brand-muted">.SPACE</span></span>
+    </a>
+    <nav class="site-nav" aria-label="Main navigation">
+      <a class="active" href="index.html?briefing=1">Home</a>
+      <a href="about.html">About</a>
+      <a href="projects.html">Projects</a>
+      <a class="github-link" href="https://github.com/leylammmdl09" target="_blank" rel="noreferrer" aria-label="GitHub">↗</a>
+    </nav>
+  </header>
+
+  <main class="game-shell">
+    <section class="bridge-screen screen-panel" id="bridge-screen" aria-labelledby="bridge-heading">
+      <div class="bridge-copy">
+        <h1 id="bridge-heading">A little lost.<br><span>A lot curious.</span></h1>
+        <p class="bridge-lede">Systems are down. Earth is out of range. One glowing note might tell you where to begin.</p>
+        <div class="bridge-instructions"><span class="key-icon">01</span><span>Inspect the note. Start the mission.</span></div>
+      </div>
+      <div class="ship-art" aria-label="Illustration of the spaceship interior">
+        <div class="viewport">
+          <div class="viewport-stars"></div>
+          <div class="distant-planet"></div>
+          <span class="orbit-label">SECTOR 07 / UNCHARTED</span>
+        </div>
+        <div class="console console-left"><i></i><i></i><i></i><span>O₂ 98%</span></div>
+        <div class="console console-right"><span class="console-bars"></span><span>FLIGHT SYSTEMS</span></div>
+        <button class="sticky-note" id="open-welcome" type="button" aria-label="Inspect the glowing mission note">
+          <span class="note-pin"></span>
+          <span class="note-small">NOTE</span>
+          <span class="note-title">Hey,<br>Astronaut!</span>
+        </button>
+        <div class="desk-edge"></div>
+        <span class="ship-caption">THE ORPHEUS · CREW DECK</span>
+      </div>
+      <div class="bridge-footer">
+        <span>YOUR DESTINATION: <b>EARTH</b></span>
+      </div>
+    </section>
+
+    <section class="map-screen screen-panel" id="map-screen" aria-labelledby="map-heading" hidden>
+      <div class="player-status game-hud" id="player-status" hidden>
+        <div class="credit-panel">
+          <span class="credit-icon" aria-hidden="true">¢</span>
+          <span class="credit-label">CREDITS</span>
+          <span class="credit-total"><span id="score">0</span><small> / 400</small></span>
+        </div>
+        <div class="crew-display">
+          <span class="player-name" id="player-name">ASTRONAUT</span>
+          <span class="crew-frame"><img class="player-avatar" id="player-avatar" alt=""></span>
+        </div>
+      </div>
+      <h1 class="map-title" id="map-heading">Leyla Mammadli</h1>
+      <button class="restart-mission" id="restart-mission" type="button">↻ RESTART</button>
+      <div class="galaxy-map" aria-label="Interactive map with four planetary destinations">
+        <svg class="orbit-lines" viewBox="0 0 1000 390" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M75 230 C180 90 300 330 420 170 S650 85 770 230 S900 310 960 135"/>
+          <path d="M75 230 C190 375 320 65 440 205 S660 330 785 150 S900 70 960 135"/>
+        </svg>
+        <div class="map-star star-a"></div><div class="map-star star-b"></div><div class="map-star star-c"></div>
+        <article class="destination destination-one">
+          <button class="planet planet-logic" type="button" data-planet="origin" aria-label="Explore Origin">
+            <img class="planet-photo" src="assets/images/planet-origin.png" alt="">
+          </button>
+          <span class="planet-index">01 / ORIGIN</span><h2>Origin</h2><p>Where the signal began</p>
+          <button class="clue-trigger" type="button" data-planet="origin"><span>(!)</span> DECODE SIGNAL</button>
+          <span class="visited-mark" aria-hidden="true">✓ SIGNAL FOUND</span>
+        </article>
+        <article class="destination destination-two">
+          <button class="planet planet-code" type="button" data-planet="code" aria-label="Explore Academia Prime">
+            <img class="planet-photo" src="assets/images/planet-code.png" alt="">
+          </button>
+          <span class="planet-index">02 / EDUCATION</span><h2>Academia Prime</h2><p>Leyla's learning journey</p>
+          <button class="clue-trigger" type="button" data-planet="code"><span>(!)</span> DECODE SIGNAL</button>
+          <span class="visited-mark" aria-hidden="true">✓ SIGNAL FOUND</span>
+        </article>
+        <article class="destination destination-three">
+          <button class="planet planet-robot" type="button" data-planet="robotics" aria-label="Explore Cyber-Core">
+            <img class="planet-photo" src="assets/images/planet-robotics.png" alt="">
+          </button>
+          <span class="planet-index">03 / ABILITIES</span><h2>Cyber-Core</h2><p>Digital logic &amp; coding skills</p>
+          <button class="clue-trigger" type="button" data-planet="robotics"><span>(!)</span> DECODE SIGNAL</button>
+          <span class="visited-mark" aria-hidden="true">✓ SIGNAL FOUND</span>
+        </article>
+        <article class="destination destination-four">
+          <button class="planet planet-skill" type="button" data-planet="beyond" aria-label="Explore Nebula-Interests">
+            <img class="planet-photo" src="assets/images/planet-beyond.png" alt="">
+          </button>
+          <span class="planet-index">04 / INTERESTS</span><h2>Nebula-Interests</h2><p>Literature, creativity &amp; curiosity</p>
+          <button class="clue-trigger" type="button" data-planet="beyond"><span>(!)</span> DECODE SIGNAL</button>
+          <span class="visited-mark" aria-hidden="true">✓ SIGNAL FOUND</span>
+        </article>
+        <div class="earth-stop">
+          <div class="planet earth-planet" aria-hidden="true"><img class="earth-photo" src="assets/images/earth-icon.jpg" alt=""></div>
+          <span>EARTH<br><b id="earth-status">LOCKED</b></span>
+        </div>
+      </div>
+      <div class="pixel-saucer" id="pixel-saucer" role="img" aria-label="Your spaceship"><i></i><b></b><span></span></div>
+      <aside class="mission-dialogue" aria-live="polite">
+        <div class="dialogue-avatar" aria-hidden="true">✦</div>
+        <div><p class="dialogue-label">MISSION CONTROL <span>● LIVE</span></p>
+          <p class="dialogue-text" id="mission-message">Click a planet or its (!) signal to inspect it. Each new clue adds 100 credits; revisit planets whenever you like.</p>
+          <div class="dialogue-progress"><span><span id="clue-count">0</span> / 4 SIGNALS</span><i class="progress-track"><b id="progress-fill"></b></i></div>
+        </div>
+      </aside>
+      <div class="flight-controller" role="group" aria-label="Planet navigation controls">
+        <button type="button" class="controller-up" data-move="up" aria-label="Fly spaceship up">▲</button>
+        <button type="button" class="controller-left" data-move="left" aria-label="Fly spaceship left">◀</button>
+        <span class="controller-scan" aria-hidden="true">✦</span>
+        <button type="button" class="controller-right" data-move="right" aria-label="Fly spaceship right">▶</button>
+        <button type="button" class="controller-down" data-move="down" aria-label="Fly spaceship down">▼</button>
+      </div>
+      <span class="controller-status" id="controller-status" aria-live="polite">TARGET: ORIGIN</span>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span class="footer-copyright">© 2026 LEYLA MAMMADLI</span>
+    <nav class="footer-links" aria-label="Contact links">
+      <a href="https://github.com/leylammmdl09" target="_blank" rel="noreferrer" aria-label="GitHub profile"><span aria-hidden="true">⌘</span> GITHUB</a>
+      <a href="mailto:leylammmdl09@gmail.com" aria-label="Email Leyla"><span aria-hidden="true">✉</span> EMAIL</a>
+    </nav>
+  </footer>
+
+  <dialog class="modal" id="avatar-modal" aria-labelledby="avatar-title">
+    <form method="dialog" class="modal-card avatar-card">
+      <p class="eyebrow">CREW REGISTRATION · STEP 01</p>
+      <h2 id="avatar-title">Choose your <span>astronaut.</span></h2>
+      <p class="modal-intro">Every great mission starts with a good co-pilot. Pick your explorer.</p>
+      <div class="avatar-options">
+        <button class="avatar-option" type="button" data-avatar="green" aria-pressed="false">
+          <span class="avatar-image-wrap"><img src="assets/images/avatar-green.jpeg" alt=""></span><strong>MOSS</strong><small>THE STEADY ONE</small>
+        </button>
+        <button class="avatar-option" type="button" data-avatar="white" aria-pressed="false">
+          <span class="avatar-image-wrap"><img src="assets/images/avatar-white.jpeg" alt=""></span><strong>NOVA</strong><small>THE DREAMER</small>
+        </button>
+        <button class="avatar-option" type="button" data-avatar="blue" aria-pressed="false">
+          <span class="avatar-image-wrap"><img src="assets/images/avatar-blue.jpeg" alt=""></span><strong>BYTE</strong><small>THE INVENTOR</small>
+        </button>
+      </div>
+      <button class="button button-primary avatar-confirm" id="confirm-avatar" type="button" disabled>CHOOSE YOUR CREW <span>→</span></button>
+    </form>
+  </dialog>
+
+  <dialog class="modal" id="welcome-modal" aria-labelledby="welcome-title">
+    <div class="modal-card welcome-card">
+      <button class="modal-close" type="button" data-close="welcome-modal" aria-label="Close">×</button>
+      <div class="welcome-portrait"><img src="assets/images/leyla-mammadli.jpeg" alt="Leyla Mammadli"><small>MISSION SPECIALIST</small></div>
+      <div class="welcome-copy">
+        <p class="eyebrow">INCOMING TRANSMISSION · FROM LEYLA</p>
+        <h2 id="welcome-title">🚀 WELCOME, ASTRONAUT!</h2>
+        <p>Your spaceship has lost its way, and you are trapped in an unknown galaxy, far away from Earth. You need to return to the Earth, but there is one challenge: the only way to return to Earth is to discover who Leyla is.</p>
+        <p>To complete your mission, you must explore different planets and collect points. Each planet holds a small piece of information about Leyla. Look for the (!) symbol beneath each planet to discover something new.</p>
+        <p>Are you ready to begin your mission? 🌍</p>
+        <button class="button button-primary" id="begin-mission" type="button">LET'S FIND EARTH <span>→</span></button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="modal" id="clue-modal" aria-labelledby="clue-title">
+    <div class="modal-card clue-card">
+      <button class="modal-close" type="button" data-close="clue-modal" aria-label="Close">×</button>
+      <p class="eyebrow" id="clue-kicker">SIGNAL DECODED · +100 CREDITS</p>
+      <h2 id="clue-title"></h2>
+      <div id="clue-content" class="clue-content"></div>
+      <div class="clue-reward"><span>✦</span><b>+100 CREDITS</b><small>ADDED TO YOUR MISSION SCORE</small></div>
+      <button class="button button-primary" id="close-clue" type="button">BACK TO THE ATLAS <span>→</span></button>
+    </div>
+  </dialog>
+
+  <dialog class="modal" id="victory-modal" aria-labelledby="victory-title">
+    <div class="confetti-layer" id="confetti-layer" aria-hidden="true"></div>
+    <div class="modal-card victory-card">
+      <div class="victory-stars" aria-hidden="true">✦　✧　✦</div>
+      <p class="eyebrow">MISSION COMPLETE · EARTH IN SIGHT</p>
+      <h2 id="victory-title">🎉 Congrats, you successfully managed to arrive to the Earth!!</h2>
+      <p>Four signals, one incredible person. You collected every credit: <strong id="final-score">400 CREDITS</strong>.</p>
+      <a class="button button-primary" href="about.html">VIEW LEYLA'S PORTFOLIO <span>→</span></a>
+      <button class="button button-primary" id="restart-after-victory" type="button">RESTART MISSION ↻</button>
+    </div>
+  </dialog>
+
+</body>
+</html>
