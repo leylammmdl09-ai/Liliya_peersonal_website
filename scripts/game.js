@@ -15,7 +15,14 @@
     robotics: {
       title: "⚡ Cyber-Core: Skill Matrix",
       kicker: "SIGNAL 03 · CYBER-CORE · ABILITIES & SKILLS",
-      content: '<div class="clue-project skill-matrix"><div class="skill-entry"><div class="skill-heading"><strong>Digital Logic &amp; Hardware</strong><span class="skill-stars" role="img" aria-label="5 out of 5 stars">⭐⭐⭐⭐⭐</span></div><p>Building circuits, breadboards, transistors, and logic gates (NOT, AND, OR, XOR).</p></div><div class="skill-entry"><div class="skill-heading"><strong>Programming &amp; Code</strong><span class="skill-stars" role="img" aria-label="4 out of 5 stars">⭐⭐⭐⭐☆</span></div><p>Foundation in software development, JavaScript, HTML, and Git/GitHub version control.</p></div><div class="skill-entry"><div class="skill-heading"><strong>Computer Systems</strong><span class="skill-stars" role="img" aria-label="5 out of 5 stars">⭐⭐⭐⭐⭐</span></div><p>Binary math, two\'s complement arithmetic, and hardware architecture fundamentals.</p></div><div class="skill-entry"><div class="skill-heading"><strong>System Troubleshooting</strong><span class="skill-stars" role="img" aria-label="5 out of 5 stars">⭐⭐⭐⭐⭐</span></div><p>Analytical, first-principles approach to debugging code and diagnosing circuit wiring.</p></div></div>'
+      content: '<div class="clue-project skill-matrix">' +
+        '<div class="skill-entry"><div class="skill-heading"><strong>Digital Logic</strong><span class="skill-stars" role="img" aria-label="3 out of 5 stars">★★★☆☆</span></div><p>Understanding logic gates and binary systems.</p></div>' +
+        '<div class="skill-entry"><div class="skill-heading"><strong>Circuits</strong><span class="skill-stars" role="img" aria-label="3 out of 5 stars">★★★☆☆</span></div><p>Breadboards, transistors, resistors, and wiring.</p></div>' +
+        '<div class="skill-entry"><div class="skill-heading"><strong>Coding</strong><span class="skill-stars" role="img" aria-label="2 out of 5 stars">★★☆☆☆</span></div><p>Programming logic and software fundamentals.</p></div>' +
+        '<div class="skill-entry"><div class="skill-heading"><strong>Systems</strong><span class="skill-stars" role="img" aria-label="3 out of 5 stars">★★★☆☆</span></div><p>Computer architecture and system operations.</p></div>' +
+        '<div class="skill-entry"><div class="skill-heading"><strong>Languages</strong><span class="skill-stars" role="img" aria-label="3.5 out of 5 stars">★★★<span class="skill-half" aria-hidden="true">★</span>☆</span></div><p>Multilingual communication and linguistic adaptability.</p></div>' +
+        '<div class="skill-entry"><div class="skill-heading"><strong>Troubleshooting</strong><span class="skill-stars" role="img" aria-label="3.5 out of 5 stars">★★★<span class="skill-half" aria-hidden="true">★</span>☆</span></div><p>Analytical problem solving and debugging.</p></div>' +
+        '</div>'
     },
     beyond: {
       title: "A universe beyond the classroom.",
@@ -273,6 +280,15 @@
       updateMap();
       openDialog(clueModal);
     }
+
+    document.querySelectorAll(".planet[data-planet]").forEach(function (planet) {
+      planet.addEventListener("click", function () {
+        var trigger = planetTriggers.find(function (item) {
+          return item.dataset.planet === planet.dataset.planet;
+        });
+        if (trigger) openPlanetClue(trigger);
+      });
+    });
 
     function clearConfetti() {
       var layer = byId("confetti-layer");
