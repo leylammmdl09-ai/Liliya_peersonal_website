@@ -44,7 +44,7 @@
         ? "You made it to Earth! Use the joystick to explore the map."
         : state.unlocked
           ? "All 400 credits collected! Autopilot is plotting a course to Earth."
-          : state.score + " / 400 credits. Click a planet or its (!) signal to inspect it; first visits earn 100 credits.";
+          : state.score + " / 400 credits. Drag your spaceship over a planet to open its signal; first visits earn 100 credits.";
     }
     var earthStatus = byId("earth-status");
     var earthStop = document.querySelector(".earth-stop");
@@ -76,6 +76,11 @@
     var selectedPlanet = 0;
     var ship = byId("pixel-saucer");
     var shipPosition = null;
+    var currentPlanetContact = null;
+    var shipDragging = false;
+    var shipPointerId = null;
+    var dragStartPointer = null;
+    var dragStartPosition = null;
     var autoLanding = false;
     var landingFrame = null;
     var victoryShown = state.landed;
@@ -109,6 +114,40 @@
         }
       });
       selectPlanet(nearestIndex);
+    }
+
+    function findPlanetUnderShip() {
+      if (!ship || map.hidden) return null;
+      var shipBounds = ship.getBoundingClientRect();
+      var shipX = shipBounds.left + shipBounds.width / 2;
+      var shipY = shipBounds.top + shipBounds.height / 2;
+      for (var index = 0; index < planetTriggers.length; index += 1) {
+        var trigger = planetTriggers[index];
+        var planetBounds = trigger.closest(".destination").querySelector(".planet").getBoundingClientRect();
+        if (shipX >= planetBounds.left && shipX <= planetBounds.right && shipY >= planetBounds.top && shipY <= planetBounds.bottom) {
+          return { trigger: trigger, index: index };
+        }
+      }
+      return null;
+    }
+
+    function rememberPlanetUnderShip() {
+      var planet = findPlanetUnderShip();
+      currentPlanetContact = planet ? planet.trigger.dataset.planet : null;
+    }
+
+    function checkPlanetContact() {
+      if (autoLanding || document.querySelector(".modal[open]")) return;
+      var planet = findPlanetUnderShip();
+      if (!planet) {
+        currentPlanetContact = null;
+        return;
+      }
+      var planetId = planet.trigger.dataset.planet;
+      if (currentPlanetContact === planetId) return;
+      currentPlanetContact = planetId;
+      selectPlanet(planet.index);
+      openPlanetClue(planet.trigger);
     }
 
     function positionShip() {
@@ -160,7 +199,7 @@
     }
 
     function moveShip(direction) {
-      if (autoLanding) return;
+      if (autoLanding || document.querySelector(".modal[open]")) return;
       if (!shipPosition) positionShip();
       var step = 24;
       var movement = {
@@ -173,9 +212,11 @@
       shipPosition.x += movement[0];
       shipPosition.y += movement[1];
       positionShip();
+      checkPlanetContact();
     }
 
     positionShip();
+    rememberPlanetUnderShip();
     window.addEventListener("resize", positionShip);
 
     document.querySelectorAll(".avatar-option").forEach(function (option) {
@@ -206,6 +247,7 @@
       bridge.hidden = true;
       map.hidden = false;
       positionShip();
+      rememberPlanetUnderShip();
       updateMap();
       if (window.MissionState.get().unlocked) startAutomaticLanding();
     });
@@ -214,6 +256,8 @@
       if (autoLanding) return;
       var clue = clues[trigger.dataset.planet];
       if (!clue) return;
+      stopShipMovement();
+      cancelShipDrag();
       var firstVisit = window.MissionState.discover(trigger.dataset.planet);
       byId("clue-kicker").textContent = clue.kicker + (firstVisit ? " · +100 CREDITS" : " · ALREADY DECODED");
       byId("clue-title").textContent = clue.title;
@@ -229,12 +273,6 @@
       updateMap();
       openDialog(clueModal);
     }
-
-    document.querySelectorAll(".clue-trigger, .planet[data-planet]").forEach(function (trigger) {
-      trigger.addEventListener("click", function () {
-        openPlanetClue(trigger);
-      });
-    });
 
     function clearConfetti() {
       var layer = byId("confetti-layer");
@@ -340,6 +378,7 @@
       map.hidden = true;
       bridge.hidden = false;
       shipPosition = null;
+      currentPlanetContact = null;
       victoryShown = false;
       selectPlanet(0);
       updateMap();
@@ -354,13 +393,49 @@
         movementTimer = null;
       }
     }
+    function cancelShipDrag() {
+      shipDragging = false;
+      if (ship) ship.classList.remove("dragging");
+      if (ship && shipPointerId !== null && ship.hasPointerCapture(shipPointerId)) {
+        ship.releasePointerCapture(shipPointerId);
+      }
+      shipPointerId = null;
+      dragStartPointer = null;
+      dragStartPosition = null;
+    }
+    ship.addEventListener("pointerdown", function (event) {
+      if (map.hidden || autoLanding || document.querySelector(".modal[open]")) return;
+      event.preventDefault();
+      stopShipMovement();
+      if (!shipPosition) positionShip();
+      shipDragging = true;
+      shipPointerId = event.pointerId;
+      dragStartPointer = { x: event.clientX, y: event.clientY };
+      dragStartPosition = { x: shipPosition.x, y: shipPosition.y };
+      ship.classList.add("dragging");
+      ship.setPointerCapture(event.pointerId);
+    });
+    ship.addEventListener("pointermove", function (event) {
+      if (!shipDragging || event.pointerId !== shipPointerId || autoLanding) return;
+      shipPosition.x = dragStartPosition.x + event.clientX - dragStartPointer.x;
+      shipPosition.y = dragStartPosition.y + event.clientY - dragStartPointer.y;
+      positionShip();
+      checkPlanetContact();
+    });
+    ship.addEventListener("pointerup", function (event) {
+      if (event.pointerId === shipPointerId) cancelShipDrag();
+    });
+    ship.addEventListener("pointercancel", cancelShipDrag);
+    ship.addEventListener("lostpointercapture", cancelShipDrag);
     document.querySelectorAll("[data-move]").forEach(function (button) {
       button.addEventListener("pointerdown", function (event) {
-        if (autoLanding) return;
+        if (autoLanding || shipDragging || document.querySelector(".modal[open]")) return;
         event.preventDefault();
         stopShipMovement();
         moveShip(button.dataset.move);
-        movementTimer = window.setInterval(function () { moveShip(button.dataset.move); }, 110);
+        if (!document.querySelector(".modal[open]")) {
+          movementTimer = window.setInterval(function () { moveShip(button.dataset.move); }, 110);
+        }
         if (button.setPointerCapture) button.setPointerCapture(event.pointerId);
       });
       button.addEventListener("pointerup", stopShipMovement);
@@ -382,8 +457,6 @@
       if (directions[event.key]) {
         event.preventDefault();
         moveShip(directions[event.key]);
-      } else if (event.key === "Enter" && event.target === document.body) {
-        planetTriggers[selectedPlanet].click();
       }
     });
 
