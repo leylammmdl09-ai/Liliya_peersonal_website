@@ -1,6 +1,6 @@
 # AI Chat Export — Leyla.Space
 
-**Exported:** November 23, 2026  
+**Exported:** November 23, 2026 (updated)
 **Scope:** Conversation history available to this session.
 
 > **History note:** Some earlier conversation was summarized or omitted before this export. Four messages were explicitly unavailable in the supplied context, and several early assistant responses are absent from the stored record. Those gaps are noted rather than reconstructed.
@@ -279,6 +279,14 @@ Updated `game.js` and `site.css`. `git diff --check` passed.
 
 export the ai chat as markdown file
 
+### User — Brighten and enlarge the avatar artwork; recheck this export
+
+in th every first pa ge where the user choose the avatar, increase the light o feach character  they look so blury and dark, also make them bigger don't change the size of figures just the pictures inside. btw recheck the ai .md and make sure all of my prompts and necessary info is inside. if not add all ofthem including this
+
+### Assistant — Avatar artwork and chat-export review
+
+Increased the rendered avatar artwork and brightness while leaving the avatar cards and image-frame dimensions unchanged. Reviewed this Markdown export against the conversation history available in the session and added this request. Some earlier messages remain unavailable in the supplied history and are called out in the export note.
+
 ## Project summary
 
 - Built a modular static portfolio with a space-mission game, astronaut avatars, briefing note, four planets, score tracking, About and Projects pages, navigation, and footer contact links.
@@ -288,6 +296,7 @@ export the ai chat as markdown file
 - The About page uses supplied space imagery, includes Leyla's Computer Engineering bio, drawing and movie interests, and displays the Spider-Man photo in the lower-right of the “Outside the lab” card.
 - GitHub header and footer links point to `https://github.com/leylammmdl09-ai/Liliya_peersonal_website`.
 - Cyber-Core now has six categories: Digital Logic (3 stars), Circuits (3), Coding (2), Systems (3), Languages (3.5), and Troubleshooting (3.5).
+- The avatar selector images are enlarged and brightened inside their existing image frames; the avatar cards and frames retain their previous dimensions.
 
 ---
 
